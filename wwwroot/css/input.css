@@ -1,0 +1,31 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+body {
+    background-color: #f6f6f8;
+}
+
+@theme {
+    --color-vulcan: #0d121b;
+    --color-pale-sky: #6b7280;
+    --color-denim: #135bec;
+    --color-athens-gray-200: #e5e7eb;
+    --color-athens-gray-100: #f6f6f8;
+    --color-gray-chateau: #94a3b8;
+    --color-gray-chateau: #94a3b8;
+    --color-oxford-blue: #334155;
+}
+
+@layer components {
+    .col-start-start {
+        @apply flex flex-col justify-start items-start
+    }
+
+    .row-start-center {
+        @apply flex flex-row items-center
+    }
+
+    .primary-button {
+        @apply rounded-lg line-clamp-1 text-center cursor-pointer bg-denim py-3 px-2 text-white text-sm
+    }
+}

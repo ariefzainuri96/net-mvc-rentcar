@@ -1,0 +1,60 @@
+﻿@model List<RentCar.Models.Entity.CarEntity>;
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="flex flex-col justify-start py-4 bg-athens-gray-100">
+    <p class="text-4xl text-vulcan">Find Your Perfect Ride</p>
+    <p class="text-pale-sky text-[16px] mt-3">Browse and filter our collection of available cars to find one that suits you.</p>
+
+    @* filter section *@
+    <div class="grid p-4 mt-6 grid-cols-2 md:grid-cols-3 gap-4 bg-white rounded-xl">
+        @* search *@
+        <div class="flex flex-col justify-start gap-2">
+            <p class="text-sm text-oxford-blue">Search</p>
+            <div class="bg-athens-gray-100 gap-2 p-3 rounded-lg flex flex-row items-center">
+                <i class="fa-solid fa-magnifying-glass text-gray-chateau"></i>
+                <input placeholder="e.g. Toyota" class="text-sm outline-none w-full line-clamp-1 text-gray-chateau" />
+            </div>
+        </div>
+        @* availability *@
+        <div class="flex flex-col justify-start gap-2">
+            <p class="text-sm text-oxford-blue">Availability</p>
+            <div class="bg-athens-gray-100 gap-2 p-3 rounded-lg flex flex-row items-center">                
+                <input type="date" class="text-sm line-clamp-1 text-gray-chateau" />
+            </div>
+        </div>
+        @* apply filters *@
+        <div class="flex flex-col justify-start gap-2">
+            <p class="text-sm hidden md:block md:opacity-0 text-oxford-blue">Availability</p>
+            <div class="primary-button">Apply Filters</div>
+        </div>
+    </div>
+
+    @* car list grid *@
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-6">
+        @foreach (var car in Model)
+        {
+            <div class="col-start-start pb-2 h-full rounded-xl overflow-hidden bg-white shadow-sm transition-shadow hover:shadow-lg">
+                <div
+                    class="w-full bg-center bg-no-repeat aspect-video bg-cover"
+                    data-alt="White Tesla Model 3 sedan"
+                    style="
+                                            background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCW6INcRMw_wG2LVAX_muXNodnrR2aOMc9ywvh0x1O-IO_UFtVJ3CRkR7EtskAKYq7Vv2smKPPZO6xRWrW5qlSqMTZHR1YG9whGLjLbI1OVYwKuUkpFU8Dk-2nVV7074ULaS8JUq36BZ-znLLGOjYfSTQ7jNApdcv93RwUBKap961dCLrMzuDGVYCxBbrEROHQ0lFotDpriOgtEQoYLM60uba7ncC_MMViRyMvP6CWZ7LaSSxg93TXsHyek-1CG41GTwdrhIvwhKEoL');
+                                        ">
+                </div>
+                <div class="col-start-start px-4 w-full">
+                    <p class="text-lg mt-3 text-vulcan">@car.Brand</p>
+                    <p class="text-sm text-pale-sky">EV, Automatic, 4 Seats</p>
+                    <div class="flex mt-4 flex-row w-full items-center gap-2">
+                        <p class="text-[16px] flex-1 line-clamp-1 text-vulcan">Rp @car.RentalRatePerDay<span class="text-sm text-pale-sky">/day</span></p>
+                        <div class="primary-button line-clamp-1 py-2">
+                            Rent Now
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

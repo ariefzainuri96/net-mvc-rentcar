@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>@ViewData["Title"] - RentCar</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <link rel="stylesheet" href="~/css/site.css"/>
+</head>
+<body>
+
+@* header *@
+<header class="sticky top-0 z-50 bg-white shadow">
+    @* row *@
+    <div class="gap-8 h-16 row-start-center mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="row-start-center flex-1 gap-4">
+            <i class="fa-solid fa-car text-vulcan"></i>
+            <a asp-controller="Home" asp-action="Index" class="text-lg h-full text-vulcan">CarRental</a>
+        </div>
+        @* row menu for breakpoints > mobile *@
+        <div class="hidden sm:block">
+            <div class="row-start-center gap-8">
+                <a class="text-denim py-0.5 text-sm border-b-2 border-b-denim" asp-controller="Home" asp-action="Index">Browse Cars</a>
+                <a class="text-vulcan py-0.5 text-sm" asp-controller="Home" asp-action="Index">My Rentals</a>
+                <a class="text-vulcan py-0.5 text-sm" asp-controller="Home" asp-action="Index">Sign In</a>
+            </div>
+        </div>
+        @* icon menu for mobile *@
+        <div class="h-10 sm:hidden bg-athens-gray-100 rounded-lg size-10 flex justify-center items-center">
+            <i class="fa-solid fa-bars text-gray-chateau"></i>
+        </div>
+    </div>
+</header>
+
+@* main content *@
+<div class="mx-auto max-w-7xl min-h-[calc(100vh-100px)] px-4 sm:px-6 lg:px-8">
+    <main role="main">
+        @RenderBody()
+    </main>
+</div>
+
+@* footer *@
+<footer class="border-t bg-white border-t-athens-gray-200 py-4 footer-title">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-vulcan">
+        &copy; 2025 - RentCar - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    </div>
+</footer>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+@* <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script> *@
+<script src="~/js/site.js" asp-append-version="true"></script>
+@RenderSection("Scripts", required: false)
+</body>
+</html>
