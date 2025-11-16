@@ -14,7 +14,7 @@
     @* row *@
     <div class="gap-8 h-16 row-start-center mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="row-start-center flex-1 gap-4">
-            <i class="fa-solid fa-car text-vulcan"></i>
+            <i class="fa-solid fa-car text-denim"></i>
             <a asp-controller="Home" asp-action="Index" class="text-lg h-full text-vulcan">CarRental</a>
         </div>
         @* row menu for breakpoints > mobile *@
@@ -26,8 +26,21 @@
             </div>
         </div>
         @* icon menu for mobile *@
-        <div class="h-10 sm:hidden bg-athens-gray-100 rounded-lg size-10 flex justify-center items-center">
-            <i class="fa-solid fa-bars text-gray-chateau"></i>
+        <div class="dropdown dropdown-end">
+            <div tabindex="0" role="button" class="h-10 cursor-pointer sm:hidden bg-athens-gray-100 rounded-lg size-10 flex justify-center items-center">
+                <i class="fa-solid fa-bars text-gray-chateau"></i>
+            </div>
+            <ul tabindex="-1" class="dropdown-content menu bg-white rounded-box z-1 w-40 p-2 shadow-sm">
+                <li>
+                    <a onclick="document.activeElement.blur()" class="text-vulcan">Browse Cars</a>
+                </li>
+                <li>
+                    <a onclick="document.activeElement.blur()" class="text-vulcan">My Rentals</a>
+                </li>
+                <li>
+                    <a onclick="document.activeElement.blur()" class="text-vulcan">Sign In</a>
+                </li>
+            </ul>
         </div>
     </div>
 </header>

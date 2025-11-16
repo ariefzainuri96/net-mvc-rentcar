@@ -9,28 +9,30 @@
     <p class="text-pale-sky text-[16px] mt-3">Browse and filter our collection of available cars to find one that suits you.</p>
 
     @* filter section *@
-    <div class="grid p-4 mt-6 grid-cols-2 md:grid-cols-3 gap-4 bg-white rounded-xl">
-        @* search *@
-        <div class="flex flex-col justify-start gap-2">
-            <p class="text-sm text-oxford-blue">Search</p>
-            <div class="bg-athens-gray-100 gap-2 p-3 rounded-lg flex flex-row items-center">
-                <i class="fa-solid fa-magnifying-glass text-gray-chateau"></i>
-                <input placeholder="e.g. Toyota" class="text-sm outline-none w-full line-clamp-1 text-gray-chateau" />
+    <form asp-action="Index" method="get">
+        <div class="grid p-4 mt-6 grid-cols-2 md:grid-cols-3 gap-4 bg-white rounded-xl">
+            @* search *@
+            <div class="flex flex-col justify-start gap-2">
+                <label for="brand" class="text-sm text-oxford-blue">Search</label>
+                <div class="bg-athens-gray-100 gap-2 p-3 rounded-lg flex flex-row items-center">
+                    <i class="fa-solid fa-magnifying-glass text-gray-chateau"></i>
+                    <input value="@Context.Request.Query["brand"]" name="brand" id="brand" type="text" placeholder="e.g. Toyota" class="text-sm outline-none w-full line-clamp-1 text-gray-chateau"/>
+                </div>
+            </div>
+            @* availability *@
+            <div class="flex flex-col justify-start gap-2">
+                <label for="availability" class="text-sm text-oxford-blue">Availability</label>
+                <div class="bg-athens-gray-100 gap-2 p-3 rounded-lg flex flex-row items-center">
+                    <input value="@Context.Request.Query["availability"]" id="availability" name="availability" type="date" class="text-sm line-clamp-1 text-gray-chateau"/>
+                </div>
+            </div>
+            @* apply filters *@
+            <div class="flex flex-col justify-start gap-2">
+                <p class="text-sm hidden md:block md:opacity-0 text-oxford-blue">Availability</p>
+                <button type="submit" class="primary-button">Apply Filters</button>
             </div>
         </div>
-        @* availability *@
-        <div class="flex flex-col justify-start gap-2">
-            <p class="text-sm text-oxford-blue">Availability</p>
-            <div class="bg-athens-gray-100 gap-2 p-3 rounded-lg flex flex-row items-center">                
-                <input type="date" class="text-sm line-clamp-1 text-gray-chateau" />
-            </div>
-        </div>
-        @* apply filters *@
-        <div class="flex flex-col justify-start gap-2">
-            <p class="text-sm hidden md:block md:opacity-0 text-oxford-blue">Availability</p>
-            <div class="primary-button">Apply Filters</div>
-        </div>
-    </div>
+    </form>
 
     @* car list grid *@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-6">
