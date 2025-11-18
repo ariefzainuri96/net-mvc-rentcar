@@ -9,7 +9,7 @@
     <p class="text-pale-sky text-[16px] mt-3">Browse and filter our collection of available cars to find one that suits you.</p>
 
     @* filter section *@
-    <form asp-action="Index" method="get">
+    <form id="filterCarForm">
         <div class="grid p-4 mt-6 grid-cols-2 md:grid-cols-3 gap-4 bg-white rounded-xl">
             @* search *@
             <div class="flex flex-col justify-start gap-2">
@@ -34,78 +34,84 @@
         </div>
     </form>
 
-    @* car list grid *@
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-6">
-        @foreach (var car in Model.Items)
-        {
-            <div class="col-start-start pb-2 h-full rounded-xl overflow-hidden bg-white shadow-sm transition-shadow hover:shadow-lg">
-                <div
-                    class="w-full bg-center bg-no-repeat aspect-video bg-cover"
-                    data-alt="White Tesla Model 3 sedan"
-                    style="
-                                            background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCW6INcRMw_wG2LVAX_muXNodnrR2aOMc9ywvh0x1O-IO_UFtVJ3CRkR7EtskAKYq7Vv2smKPPZO6xRWrW5qlSqMTZHR1YG9whGLjLbI1OVYwKuUkpFU8Dk-2nVV7074ULaS8JUq36BZ-znLLGOjYfSTQ7jNApdcv93RwUBKap961dCLrMzuDGVYCxBbrEROHQ0lFotDpriOgtEQoYLM60uba7ncC_MMViRyMvP6CWZ7LaSSxg93TXsHyek-1CG41GTwdrhIvwhKEoL');
-                                        ">
-                </div>
-                <div class="col-start-start px-4 w-full">
-                    <p class="text-lg mt-3 text-vulcan">@car.Brand</p>
-                    <p class="text-sm text-pale-sky">EV, Automatic, 4 Seats</p>
-                    <div class="flex mt-4 flex-row w-full items-center gap-2">
-                        <p class="text-[16px] flex-1 line-clamp-1 text-vulcan">Rp @car.RentalRatePerDay<span class="text-sm text-pale-sky">/day</span></p>
-                        <div class="primary-button line-clamp-1 py-2">
-                            Rent Now
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
+    @* LOADING UI *@
+    <div id="loading" class="hidden py-10 text-center mt-6">
+        <i class="fa-solid fa-spinner fa-spin text-3xl text-gray-chateau"></i>
+        <p class="mt-3 text-gray-chateau">Loading cars...</p>
     </div>
 
-    @* pagination *@
-    <div>
-        <ul>
-            @if (Model.HasPreviousPage)
-            {
-                <li class="page-item">
-                    <a class="text-vulcan" href="?page=@(Model.PageNumber - 1)">Previous</a>
-                </li>
-            }
-
-            @for (var i = 1; i <= Model.TotalPages; i++)
-            {
-                <li class="page-item @(i == Model.PageNumber ? "active" : "")">
-                    <a class="text-vulcan" href="?page=@i">@i</a>
-                </li>
-            }
-
-            @if (Model.HasNextPage)
-            {
-                <li class="page-item">
-                    <a class="text-vulcan" href="?page=@(Model.PageNumber + 1)">Next</a>
-                </li>
-            }
-
-            @* @if (Model.HasPreviousPage)
-            {
-                <li>
-                    <a href="#" onclick="loadPage(@(Model.PageNumber - 1))">Prev</a>
-                </li>
-            }
-
-            @for (int i = 1; i <= Model.TotalPages; i++)
-            {
-                <li class="@(i == Model.PageNumber ? "active" : "")">
-                    <a href="#" onclick="loadPage(@i)">@i</a>
-                </li>
-            }
-
-            @if (Model.HasNextPage)
-            {
-                <li>
-                    <a href="#" onclick="loadPage(@(Model.PageNumber + 1))">Next</a>
-                </li>
-            } *@
-
-        </ul>
+    @* ERROR UI *@
+    <div id="error" class="hidden py-10 text-center mt-6">
+        <p class="text-red-600 text-xl font-semibold">Oops! Something went wrong.</p>
+        <p class="text-gray-500 mt-1">Please try again.</p>
+        <button id="retryBtn" class="primary-button mt-4">Retry</button>
     </div>
+
+    @* car-list container *@
+    <div id="car-list"></div>
+
+    @section Scripts
+    {
+        <script>
+            let lastRequest = { page: 1, brand: "", availability: "" };
+
+            function showLoading() {
+                $("#loading").removeClass("hidden");
+                $("#error").addClass("hidden");
+                $("#car-list").addClass("opacity-20 pointer-events-none");
+            }
+
+            function hideLoading() {
+                $("#loading").addClass("hidden");
+                $("#car-list").removeClass("opacity-20 pointer-events-none");
+            }
+
+            function showError() {
+                $("#error").removeClass("hidden");
+                $("#loading").addClass("hidden");
+            }
+
+            function loadPage(page, brand, availability) {   
+                lastRequest = { page, brand, availability };
+
+                showLoading();
+                
+                $.ajax({
+                    url: "/Home/GetCar?page=" + page +
+                    "&brand=" + encodeURIComponent(brand) +
+                    "&availability=" + encodeURIComponent(availability),
+                    type: "GET",
+                    success: function (html) {
+                        hideLoading();
+                        $("#car-list").html(html);
+                        $("#error").addClass("hidden");
+                    },
+                    error: function () {
+                        showError();
+                    }
+                });
+            }
+
+            $(document).ready(function () {
+                // initial load page
+                loadPage(1, "", "");
+
+                // intercept filter submit
+                $("#filterCarForm").on("submit", function (e) {                    
+                    e.preventDefault(); // prevent full page reload
+
+                    const brand = $("#brand").val();
+                    const availability = $("#availability").val();
+
+                    loadPage(1, brand, availability)
+                })
+
+                // retry button
+                $("#retryBtn").on("click", function () {
+                    loadPage(lastRequest.page, lastRequest.brand, lastRequest.availability);
+                });
+            });
+        </script>
+    }
 
 </div>

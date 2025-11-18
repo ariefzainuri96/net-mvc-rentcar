@@ -1,0 +1,54 @@
+@model RentCar.Models.Response.PaginationBaseResponse<RentCar.Models.Entity.CarEntity>
+
+@* car list grid *@
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-6">
+    @foreach (var car in Model.Items)
+    {
+        <div class="col-start-start pb-2 h-full rounded-xl overflow-hidden bg-white shadow-sm transition-shadow hover:shadow-lg">
+            <div
+                class="w-full bg-center bg-no-repeat aspect-video bg-cover"
+                data-alt="White Tesla Model 3 sedan"
+                style="
+                                            background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCW6INcRMw_wG2LVAX_muXNodnrR2aOMc9ywvh0x1O-IO_UFtVJ3CRkR7EtskAKYq7Vv2smKPPZO6xRWrW5qlSqMTZHR1YG9whGLjLbI1OVYwKuUkpFU8Dk-2nVV7074ULaS8JUq36BZ-znLLGOjYfSTQ7jNApdcv93RwUBKap961dCLrMzuDGVYCxBbrEROHQ0lFotDpriOgtEQoYLM60uba7ncC_MMViRyMvP6CWZ7LaSSxg93TXsHyek-1CG41GTwdrhIvwhKEoL');
+                                        ">
+            </div>
+            <div class="col-start-start px-4 w-full">
+                <p class="text-lg mt-3 text-vulcan">@car.Brand</p>
+                <p class="text-sm text-pale-sky">EV, Automatic, 4 Seats</p>
+                <div class="flex mt-4 flex-row w-full items-center gap-2">
+                    <p class="text-[16px] flex-1 line-clamp-1 text-vulcan">Rp @car.RentalRatePerDay<span class="text-sm text-pale-sky">/day</span></p>
+                    <div class="primary-button line-clamp-1 py-2">
+                        Rent Now
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@* pagination *@
+<div>
+    <ul>
+        @if (Model.HasPreviousPage)
+        {
+            <li>
+                <a href="#" onclick="loadPage(@(Model.PageNumber - 1), lastRequest.brand, lastRequest.availability)">Prev</a>
+            </li>
+        }
+
+        @for (var i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="@(i == Model.PageNumber ? "text-denim font-bold text-lg" : "")">            
+                <a href="#" onclick="loadPage(@i, lastRequest.brand, lastRequest.availability)">@i</a>
+            </li>
+        }
+
+        @if (Model.HasNextPage)
+        {
+            <li>
+                <a href="#" onclick="loadPage(@(Model.PageNumber + 1), lastRequest.brand, lastRequest.availability)">Next</a>
+            </li>
+        }
+
+    </ul>
+</div>

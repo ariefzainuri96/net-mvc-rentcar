@@ -3,9 +3,9 @@
 ## Integrating tailwind v4
 
 1. open this link -> `https://tailwindcss.com/docs/installation/tailwind-cli`
-2. create file app.css inside /wwwroot/css
+2. create file input.css inside /wwwroot/css
 3. create script for watching any changes for tailwind using below command
-    - `npx @tailwindcss/cli -i ./wwwroot/css/app.css -o ./wwwroot/css/site.css --watch`
+    - `npx @tailwindcss/cli -i ./wwwroot/css/input.css -o ./wwwroot/css/site.css --watch`
 4. makesure the output is always site.css, because it follow the convention of ASP .NET MVC and we dont have to adjust the existing styling for razor file
 
 ## Enable hot reload in browser
