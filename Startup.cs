@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RentCar.Data;
+using AutoMapper;
 
 namespace RentCar
 {
@@ -23,6 +24,8 @@ namespace RentCar
             services.AddControllersWithViews();
 
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
+
+            services.AddAutoMapper(typeof(Startup));
 
             services.AddDbContext<RentalCarDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));

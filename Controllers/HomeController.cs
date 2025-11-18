@@ -1,11 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using RentCar.Data;
+using RentCar.Extensions;
 using RentCar.Models;
+using RentCar.Models.Entity;
+using RentCar.Models.Response;
 
 namespace RentCar.Controllers
 {
@@ -31,7 +35,7 @@ namespace RentCar.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public IActionResult Index(string? brand, string? availability)
+        public async Task<IActionResult> Index(int page, string? brand, string? availability)
         {
             var query = _dbContext.Cars.AsQueryable();
 
@@ -42,7 +46,9 @@ namespace RentCar.Controllers
 
             if (string.IsNullOrEmpty(availability))
             {
-                return View(query.Where(data => data.Status.ToLower().Equals("tersedia")).ToList());
+                query = query.Where(data => data.Status.ToLower().Equals("tersedia"));
+
+                return View(await query.ToPagedResultAsync(page, 10));
             }
 
             // filter out when availability search param is not null
@@ -55,14 +61,17 @@ namespace RentCar.Controllers
 
             var rentQuery = _dbContext.Rents.AsQueryable();
 
-            var rentedAvailableIds = rentQuery
+            var rentedAvailableIds = await rentQuery
                 .Where(data => data.Status.Equals("Active") && availabilityDateTime > data.EndDate)
-                .Select(data => data.CarId).ToList();
+                .Select(data => data.CarId)
+                .ToListAsync();
 
+            // filter using IN CarId || Status == tersedia
             query =
-                query.Where(data => rentedAvailableIds.Contains(data.Id) || data.Status.ToLower().Equals("tersedia"));
+                query
+                    .Where(data => rentedAvailableIds.Contains(data.Id) || data.Status.ToLower().Equals("tersedia"));        
 
-            return View(query.ToList());
+            return View(await query.ToPagedResultAsync(page, 10));
         }
     }
 }

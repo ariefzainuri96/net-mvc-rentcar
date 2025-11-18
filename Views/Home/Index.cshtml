@@ -1,4 +1,4 @@
-﻿@model List<RentCar.Models.Entity.CarEntity>;
+﻿@model RentCar.Models.Response.PaginationBaseResponse<RentCar.Models.Entity.CarEntity>;
 
 @{
     ViewData["Title"] = "Home Page";
@@ -36,7 +36,7 @@
 
     @* car list grid *@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-6">
-        @foreach (var car in Model)
+        @foreach (var car in Model.Items)
         {
             <div class="col-start-start pb-2 h-full rounded-xl overflow-hidden bg-white shadow-sm transition-shadow hover:shadow-lg">
                 <div
@@ -59,4 +59,53 @@
             </div>
         }
     </div>
+
+    @* pagination *@
+    <div>
+        <ul>
+            @if (Model.HasPreviousPage)
+            {
+                <li class="page-item">
+                    <a class="text-vulcan" href="?page=@(Model.PageNumber - 1)">Previous</a>
+                </li>
+            }
+
+            @for (var i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                    <a class="text-vulcan" href="?page=@i">@i</a>
+                </li>
+            }
+
+            @if (Model.HasNextPage)
+            {
+                <li class="page-item">
+                    <a class="text-vulcan" href="?page=@(Model.PageNumber + 1)">Next</a>
+                </li>
+            }
+
+            @* @if (Model.HasPreviousPage)
+            {
+                <li>
+                    <a href="#" onclick="loadPage(@(Model.PageNumber - 1))">Prev</a>
+                </li>
+            }
+
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="@(i == Model.PageNumber ? "active" : "")">
+                    <a href="#" onclick="loadPage(@i)">@i</a>
+                </li>
+            }
+
+            @if (Model.HasNextPage)
+            {
+                <li>
+                    <a href="#" onclick="loadPage(@(Model.PageNumber + 1))">Next</a>
+                </li>
+            } *@
+
+        </ul>
+    </div>
+
 </div>
