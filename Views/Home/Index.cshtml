@@ -41,10 +41,12 @@
     </div>
 
     @* ERROR UI *@
-    <div id="error" class="hidden py-10 text-center mt-6">
-        <p class="text-red-600 text-xl font-semibold">Oops! Something went wrong.</p>
-        <p class="text-gray-500 mt-1">Please try again.</p>
-        <button id="retryBtn" class="primary-button mt-4">Retry</button>
+    <div id="error" class="hidden mt-6">
+        <div class="flex flex-col text-center justify-center">
+            <p class="text-red-600 text-xl font-semibold">Oops! Something went wrong.</p>
+            <p class="text-gray-500 mt-1">Please try again.</p>
+            <button id="retryBtn" class="primary-button mt-4 px-10 self-center">Retry</button>
+        </div>
     </div>
 
     @* car-list container *@
@@ -58,12 +60,12 @@
             function showLoading() {
                 $("#loading").removeClass("hidden");
                 $("#error").addClass("hidden");
-                $("#car-list").addClass("opacity-20 pointer-events-none");
+                $("#car-list").addClass("hidden");
             }
 
             function hideLoading() {
                 $("#loading").addClass("hidden");
-                $("#car-list").removeClass("opacity-20 pointer-events-none");
+                $("#car-list").removeClass("hidden");
             }
 
             function showError() {
@@ -109,7 +111,12 @@
                 // retry button
                 $("#retryBtn").on("click", function () {
                     loadPage(lastRequest.page, lastRequest.brand, lastRequest.availability);
-                });
+                });                
+            });
+
+            $(document).on("click", ".pagination-link", function () {
+                const page = $(this).data("page");
+                loadPage(page, lastRequest.brand, lastRequest.availability);
             });
         </script>
     }

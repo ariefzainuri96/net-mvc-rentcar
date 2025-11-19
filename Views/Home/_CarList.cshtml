@@ -28,27 +28,26 @@
 
 @* pagination *@
 <div>
-    <ul>
+    <ul class="text-vulcan">
         @if (Model.HasPreviousPage)
         {
             <li>
-                <a href="#" onclick="loadPage(@(Model.PageNumber - 1), lastRequest.brand, lastRequest.availability)">Prev</a>
+                <a href="#" class="pagination-link" data-page="@(Model.PageNumber - 1)">Prev</a>
             </li>
         }
 
         @for (var i = 1; i <= Model.TotalPages; i++)
         {
-            <li class="@(i == Model.PageNumber ? "text-denim font-bold text-lg" : "")">            
-                <a href="#" onclick="loadPage(@i, lastRequest.brand, lastRequest.availability)">@i</a>
+            <li class="@(i == Model.PageNumber ? "font-bold text-lg" : "")">            
+                <a href="#" class="pagination-link" data-page="@i">@i</a>
             </li>
         }
 
         @if (Model.HasNextPage)
         {
             <li>
-                <a href="#" onclick="loadPage(@(Model.PageNumber + 1), lastRequest.brand, lastRequest.availability)">Next</a>
+                <a href="#" class="pagination-link" data-page="@(Model.PageNumber + 1)">Next</a>
             </li>
         }
-
     </ul>
 </div>
