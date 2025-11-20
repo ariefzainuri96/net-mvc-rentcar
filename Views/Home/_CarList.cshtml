@@ -27,26 +27,30 @@
 </div>
 
 @* pagination *@
-<div>
-    <ul class="text-vulcan">
+<div class="flex flex-row justify-center mt-4">
+    <ul class="flex flex-row gap-2">
         @if (Model.HasPreviousPage)
         {
             <li>
-                <a href="#" class="pagination-link" data-page="@(Model.PageNumber - 1)">Prev</a>
+                <a href="#" class="pagination-link size-10 flex justify-center items-center rounded-lg text-river-bed bg-athens-gray-200" data-page="@(Model.PageNumber - 1)">
+                    <i class=" fa-solid fa-chevron-left"></i>
+                </a>
             </li>
         }
 
         @for (var i = 1; i <= Model.TotalPages; i++)
         {
-            <li class="@(i == Model.PageNumber ? "font-bold text-lg" : "")">            
-                <a href="#" class="pagination-link" data-page="@i">@i</a>
+            <li>
+                <a href="#" class="pagination-link size-10 flex justify-center items-center rounded-lg @(i == Model.PageNumber ? "bg-denim text-white" : "text-river-bed bg-athens-gray-200")" data-page="@i">@i</a>
             </li>
         }
 
         @if (Model.HasNextPage)
         {
             <li>
-                <a href="#" class="pagination-link" data-page="@(Model.PageNumber + 1)">Next</a>
+                <a href="#" class="pagination-link size-10 flex justify-center items-center rounded-lg text-river-bed bg-athens-gray-200" data-page="@(Model.PageNumber + 1)">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </a>
             </li>
         }
     </ul>
