@@ -1,5 +1,56 @@
 @model RentCar.Models.Response.PaginationBaseResponse<RentCar.Models.Entity.CarEntity>
 
+@* @{
+    // --- Pagination Truncation Logic ---
+    // This C# block calculates which pages and ellipses to show.
+
+    // How many pages to show around the current page (e.g., 1 ... 3 4 [5] 6 7 ... 10)
+    const int pagesAroundCurrent = 2;
+
+    var pageNumbers = Enumerable.Range(1, Model.TotalPages).ToList();
+    var pagesToShow = new List<object>();
+
+    if (pageNumbers.Count > 0)
+    {
+        pagesToShow.Add(1); // Always show page 1
+
+        var needsLeadingEllipsis = Model.PageNumber > pagesAroundCurrent + 2;
+        if (needsLeadingEllipsis)
+        {
+            pagesToShow.Add("..."); // Ellipsis
+        }
+
+        // Add pages around the current one
+        var start = Math.Max(2, Model.PageNumber - pagesAroundCurrent);
+        var end = Math.Min(Model.TotalPages - 1, Model.PageNumber + pagesAroundCurrent);
+
+        if (needsLeadingEllipsis) start = Math.Max(start, 2); // Start from 2 if ellipsis shown
+
+        for (var i = start; i <= end; i++)
+        {
+            pagesToShow.Add(i);
+        }
+
+        var needsTrailingEllipsis = Model.PageNumber < Model.TotalPages - pagesAroundCurrent - 1;
+        if (needsTrailingEllipsis && Model.TotalPages > end)
+        {
+            pagesToShow.Add("..."); // Ellipsis
+        }
+
+        // Always show last page if it hasn't been added and TotalPages > 1
+        if (Model.TotalPages > 1 && pagesToShow.LastOrDefault() is int lastPage && lastPage < Model.TotalPages)
+        {
+            pagesToShow.Add(Model.TotalPages);
+        }
+
+        // Clean up: Remove consecutive duplicates and ensure the list only contains ints and '...'
+        pagesToShow = pagesToShow.Distinct().ToList();
+
+        // A final cleanup for edge cases like 1 ... 3 4 5 ... 8 where '1' is too close to '3'
+        // This is complex, but for simplicity, we rely on the above logic being close enough.
+    }
+} *@
+
 @* car list grid *@
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-6">
     @foreach (var car in Model.Items)
@@ -26,9 +77,51 @@
     }
 </div>
 
+@* <div class="flex flex-row justify-center mt-4">
+    <ul class="flex flex-row space-x-2">
+        @if (Model.PageNumber > 1)
+        {
+            <li>
+                <a href="#" class="pagination-link size-10 flex justify-center items-center rounded-lg text-river-bed bg-athens-gray-200" data-page="@(Model.PageNumber - 1)">
+                    <i class=" fa-solid fa-chevron-left"></i>
+                </a>
+            </li>
+        }
+
+        @foreach (var item in pagesToShow)
+        {
+            @if (item is int pageNumber)
+            {
+                <li>
+                    <a href="#"
+                       class="pagination-link size-10 flex justify-center items-center rounded-lg @(pageNumber == Model.PageNumber ? "bg-denim text-white" : "text-river-bed bg-athens-gray-200")"
+                       data-page="@pageNumber">
+                        @pageNumber
+                    </a>
+                </li>
+            }
+            else if (item is string ellipsis && ellipsis == "...")
+            {
+                <li class="size-10 flex justify-center items-center text-river-bed">
+                    ...
+                </li>
+            }
+        }
+
+        @if (Model.PageNumber < Model.TotalPages)
+        {
+            <li>
+                <a href="#" class="pagination-link size-10 flex justify-center items-center rounded-lg text-river-bed bg-athens-gray-200" data-page="@(Model.PageNumber + 1)">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </a>
+            </li>
+        }
+    </ul>
+</div> *@
+
 @* pagination *@
 <div class="flex flex-row justify-center mt-4">
-    <ul class="flex flex-row gap-2">
+    <ul class="flex flex-row space-x-2">
         @if (Model.HasPreviousPage)
         {
             <li>
